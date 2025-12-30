@@ -1,0 +1,3 @@
+[submodule "vendors/xenserver"]
+	path = vendors/xenserver
+	url = https://github.com/lnav-xenserver-logs/lnav_xenserver_logs.git
