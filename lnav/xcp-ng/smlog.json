@@ -15,7 +15,7 @@
 
         "regex": {
             "master": {
-                "pattern": "(?J)^(?<timestamp>\\w{3}\\s+\\d{2}\\s+(?:\\d{2}:?){3})\\s+(?<host>\\S+)\\s+(?<process>[^:\\s\\[]+)(?::?\\s)?(?:(?:\\[(?<pid>\\d+)\\]:?)|(?::))?\\s+(?:(?:(?:\\*?(?<short_vdi_uuid>[\\w\\d]+))\\[(?<image_format>\\w+)\\]\\((?<vdi_size>\\d+\\.\\d{3}\\w)\\/{3}(?<vdi_real_size>\\d+\\.\\d{3}\\w)\\|\\w+\\)(?::\\s+(?<sm_config>{[^}]+})$)?)|(?:\\[(?<command>'[^\\]]+')\\])|(?:\\*{5}\\s+(?<exception_group>[^:]+):\\s+(?:(?<exception_operation>[^:]+)?:\\s+)?EXCEPTION\\s+<class\\s+'(?<exception_type>[^']+)'>,\\s(?<exception_message>(?:(?:\\[(?<exception_errno>Errno\\s\\d+)\\])\\s)?.+?(?:(?:\\[(?<exception_details>[^\\]]+)\\]))?)$)|(?:(?:(?<sub_component>[\\w-]+):\\s+)?(?<body>.*)))$"
+                "pattern": "(?J)^(?<timestamp>\\w{3}\\s+\\d{1,2}\\s+(?:\\d{2}:?){3})\\s+(?<host>\\S+)\\s+(?<process>[^:\\s\\[]+)(?::?\\s)?(?:(?:\\[(?<pid>\\d+)\\]:?)|(?::))?\\s+(?:(?:(?:\\*?(?<short_vdi_uuid>[\\w\\d]+))\\[(?<image_format>\\w+)\\]\\((?<vdi_size>\\d+\\.\\d{3}\\w)\\/{3}(?<vdi_real_size>\\d+\\.\\d{3}\\w)\\|\\w+\\)(?::\\s+(?<sm_config>{[^}]+})$)?)|(?:\\[(?<command>'[^\\]]+')\\])|(?:\\*{5}\\s+(?<exception_group>[^:]+):\\s+(?:(?<exception_operation>[^:]+)?:\\s+)?EXCEPTION\\s+<class\\s+'(?<exception_type>[^']+)'>,\\s(?<exception_message>(?:(?:\\[(?<exception_errno>Errno\\s\\d+)\\])\\s)?.+?(?:(?:\\[(?<exception_details>[^\\]]+)\\]))?)$)|(?:(?:(?<sub_component>[\\w-]+):\\s+)?(?<body>.*)))$"
             }
         },
         "value": {
@@ -56,7 +56,7 @@
                 "color": "#bd93f9"
             },
             "short_uuid": {
-                "pattern": "\\*?[0-9a-f]{8}",
+                "pattern": "\\*?([0-9a-f]{8})\\[",
                 "color": "#bd93f9"
             },
             "command": {
@@ -70,8 +70,7 @@
             },
             "error_number": {
                 "pattern": "Errno \\d+",
-                "color": "#ff5555",
-                "bold": true
+                "color": "#ff5555"
             },
             "vhd_size": {
                 "pattern": "\\d+\\.\\d{3}.",
