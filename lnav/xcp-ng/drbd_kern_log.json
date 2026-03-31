@@ -1,0 +1,82 @@
+{
+    "$schema": "https://lnav.org/schemas/format-v1.schema.json",
+    "drbd_kern_log": {
+        "title": "DRBD Kernel Logs",
+        "description": "Parser for DRBD kernel messages, state changes, and transitions",
+        "url": "https://linbit.com/drbd/",
+        
+        "file-pattern": ".*",
+        "multiline": false,
+
+        "timestamp-field": "timestamp",
+        "body-field": "drbd_message",
+        "opid-field": "drbd_process",
+
+        "regex": {
+            "drbd_events": {
+                "pattern": "^(?<timestamp>\\w{3}\\s+\\d{1,2}\\s+(?:\\d{2}:?){3})\\s+(?<host>\\S+)\\s+kernel:?\\s*(?:\\[(?<kernel_timestamp>\\d+(?:\\.\\d+)?)\\]:?)?\\s*drbd\\s+(?<drbd_resource>[^\\s:\\/]+)(?:\\/0)?(?:\\s+(?<drbd_process>drbd\\d+))?(?:\\s+(?<drbd_host>[^\\s:]+))?:?\\s+(?<drbd_message>(?:(?<drbd_message_type>\\w+)\\(\\s+(?<drbd_message_status_prev>\\w+)\\s+->\\s+(?<drbd_message_status_new>\\w+)\\s+\\)(?:\\s+(?<drbd_message_sec_type>\\w+)\\(\\s+(?<drbd_message_sec_status_prev>\\w+)\\s+->\\s+(?<drbd_message_sec_status_next>\\w+)\\s+\\))?\\s+\\[(?<drbd_message_reason>[^\\]]+)\\])|(?:(?<drbd_message_state_change_action>\\w+)\\s+(?<drbd_message_state_change_scope>\\w+)\\s+state\\s+change\\s+(?<drbd_message_state_change_number>\\d+):\\s+(?<drbd_message_state_change_src>\\d)->(?<drbd_message_state_change_dst>\\d)\\s+\\w+\\(\\s+(?<drbd_message_state_change_role>\\w+)\\s+\\)\\s+\\w+\\(\\s+(?<drbd_message_state_change_status>\\w+)\\s+\\))|\\N*)$"
+            }
+        },
+
+        "value": {
+            "timestamp": { "kind": "string", "identifier": true },
+            "host": { "kind": "string", "identifier": true },
+            "kernel_timestamp": { "kind": "float" },
+            "drbd_resource": { "kind": "string", "identifier": true },
+            "drbd_process": { "kind": "string", "identifier": true },
+            "drbd_host": { "kind": "string", "identifier": true },
+            "drbd_message": { "kind": "string" },
+            "drbd_message_type": { "kind": "string" },
+            "drbd_message_status_prev": { "kind": "string" },
+            "drbd_message_status_new": { "kind": "string" },
+            "drbd_message_sec_type": { "kind": "string" },
+            "drbd_message_sec_status_prev": { "kind": "string" },
+            "drbd_message_sec_status_next": { "kind": "string" },
+            "drbd_message_reason": { "kind": "string" },
+            "drbd_message_state_change_action": { "kind": "string" },
+            "drbd_message_state_change_scope": { "kind": "string" },
+            "drbd_message_state_change_number": { "kind": "integer" },
+            "drbd_message_state_change_src": { "kind": "integer" },
+            "drbd_message_state_change_dst": { "kind": "integer" },
+            "drbd_message_state_change_role": { "kind": "string" },
+            "drbd_message_state_change_status": { "kind": "string" }
+        },
+        "highlights": {
+            "drbd_keyword": {
+                "pattern": "\\bdrbd\\b",
+                "color": "#ffb86c"
+            },
+            "status_primary": {
+                "pattern": "\\bPrimary\\b",
+                "color": "#50fa7b",
+                "underline": true
+            },
+            "status_secondary": {
+                "pattern": "\\bSecondary\\b",
+                "color": "#8be9fd"
+            },
+            "status_uptodate": {
+                "pattern": "\\bUpToDate\\b",
+                "color": "#50fa7b"
+            },
+            "status_inconsistent": {
+                "pattern": "\\bInconsistent|Diskless|StandAlone\\b",
+                "color": "#ff5555"
+            },
+            "transition_arrow": {
+                "pattern": "->",
+                "color": "#bd93f9"
+            },
+            "reason_bracket": {
+                "pattern": "\\[[^\\]]+\\]$",
+                "color": "#f1fa8c"
+            }
+        },
+        "sample": [
+            { "line": "Mar 30 06:28:28 host kernel: [1608946.274904] drbd xcp-volume-xxx: Preparing remote state change 603402183: 1->3 role( Secondary ) conn( Connected )" },
+            { "line": "Mar 30 06:25:54 host kernel: [1608792.351529] drbd xcp-volume-xxx: Preparing remote state change 2944712793: 2->all role( Secondary )" },
+            { "line": "Mar 30 06:25:54 host kernel: [1608792.351669] drbd xcp-volume-xxx host: Committing remote state change 2944712793 (primary_nodes=0)" },
+            { "line": "Mar 30 06:25:54 host kernel: [1608792.351683] drbd xcp-volume-xxx host: peer( Primary -> Secondary ) [remote]" }
+        ]
+    }
+}
