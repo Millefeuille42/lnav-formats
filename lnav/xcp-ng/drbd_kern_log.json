@@ -1,3 +1,4 @@
+#! /usr/bin/env lnav -i
 {
     "$schema": "https://lnav.org/schemas/format-v1.schema.json",
     "drbd_kern_log": {
