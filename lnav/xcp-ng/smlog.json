@@ -15,7 +15,7 @@
 
         "regex": {
             "master": {
-                "pattern": "(?J)^(?<timestamp>\\w{3}\\s+\\d{1,2}\\s+(?:\\d{2}:?){3})\\s+(?<host>\\S+)\\s+(?<process>[^:\\s\\[]+)(?::?\\s)?(?:(?:\\[(?<pid>\\d+)\\]:?)|(?::))?\\s+(?:(?:(?:\\*?(?<short_vdi_uuid>[\\w\\d]+))\\[(?<image_format>\\w+)\\]\\((?<vdi_size>\\d+\\.\\d{3}\\w)\\/{3}(?<vdi_real_size>\\d+\\.\\d{3}\\w)\\|\\w+\\)(?::\\s+(?<sm_config>{[^}]+})$)?)|(?:\\[(?<command>'[^\\]]+')\\])|(?:\\*{5}\\s+(?<exception_group>[^:]+):\\s+(?:(?<exception_operation>[^:]+)?:\\s+)?EXCEPTION\\s+<class\\s+'(?<exception_type>[^']+)'>,\\s(?<exception_message>(?:(?:\\[(?<exception_errno>Errno\\s\\d+)\\])\\s)?.+?(?:(?:\\[(?<exception_details>[^\\]]+)\\]))?)$)|(?:(?:(?<sub_component>[\\w-]+):\\s+)?(?<body>.*)))$"
+                "pattern": "(?J)^(?<timestamp>\\w{3}\\s+\\d{1,2}\\s+(?:\\d{2}:?){3})\\s+(?<host>\\S+)\\s+(?<process>[^:\\s\\[]+)(?::?\\s)?(?:(?:\\[(?<pid>\\d+)\\](?:\\[(?<thread_name>[^\\]]+)\\])?:?)|(?::))?(?:\\s+|$)(?:(?:(?:\\*?(?<short_vdi_uuid>[\\w\\d]+))\\((?<vdi_size>\\d+\\.\\d{3}\\w)\\/(?<vdi_real_size>\\d+\\.\\d{3}\\w)[^)]*\\)\\[(?<image_format>\\w+)\\](?::\\s+(?<sm_config>{[^}]+})$)?)|(?:\\[(?<command>'[^\\]]+')\\])|(?:\\*{5}\\s+(?<exception_group>[^:]+):\\s+(?:(?<exception_operation>[^:]+)?:\\s+)?EXCEPTION\\s+<class\\s+'(?<exception_type>[^']+)'>,\\s(?<exception_message>(?:(?:\\[(?<exception_errno>Errno\\s\\d+)\\])\\s)?.+?(?:(?:\\[(?<exception_details>[^\\]]+)\\]))?)$)|(?:(?:(?<sub_component>[\\w-]+):\\s+)?(?<body>.*)))$"
             }
         },
         "value": {
@@ -23,6 +23,7 @@
             "host": { "kind": "string", "identifier": true },
             "process": { "kind": "string", "identifier": true },
             "pid": { "kind": "integer", "identifier": true },
+            "thread_name": { "kind": "string", "identifier": true },
             "sub_component": { "kind": "string", "identifier": true },
             "body": { "kind": "string" },
             "short_vdi_uuid": { "kind": "string", "identifier": true },
@@ -56,7 +57,7 @@
                 "color": "#bd93f9"
             },
             "short_uuid": {
-                "pattern": "\\*?([0-9a-f]{8})\\[",
+                "pattern": "\\*?([0-9a-f]{8})\\(",
                 "color": "#bd93f9"
             },
             "command": {
@@ -83,9 +84,10 @@
         },
         "sample": [
             { "line": "Dec 11 11:11:11 my-host fairlock[111]: /run/fairlock/devicemap" },
-            { "line": "Dec 11 11:11:11 my-host SM: [2222]  = 0" },
-            { "line": "Dec 11 11:11:11 my-host SMGC: [333] SR xxx ('my-sr') (333 VDIs in 33 VHD trees):" },
-            { "line": "Dec 11 11:11:11 my-host SMGC: [444]         *xxx[VHD](50.000G///44.444G|n)" }
+            { "line": "Dec 11 11:11:11 my-host SM: [2222][MainThread]  = 0" },
+            { "line": "Dec 11 11:11:11 my-host SMGC: [333][MainThread] SR xxx ('my-sr') (333 VDIs in 33 COW trees):" },
+            { "line": "Dec 11 11:11:11 my-host SMGC: [444][MainThread]         *xxx(50.000G/44.444G?)[qcow2]" },
+            { "line": "Dec 11 11:11:11 my-host SMGC: [555][OtherThread]" }
         ]
     }
 }
